@@ -1,5 +1,5 @@
 {
-  "name": "real-fund-smartpool",
+  "name": "RealFund",
   "version": "1.0.0",
   "description": "",
   "main": "truffle-config.js",
@@ -11,5 +11,8 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@truffle/hdwallet-provider": "^1.1.1"
+  }
 }
