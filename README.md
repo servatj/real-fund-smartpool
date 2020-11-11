@@ -13,3 +13,10 @@ npm install
 truffle migrate --reset
 6. or Deploy in testnet (Kovan)
 truffle migrate --reset --network kovan
+
+WHAT IS DEPLOYED?
+- First we deploy two ERC20 tokens, first the REAL FUND TOKEN with 75.000 units and second and only for testing the DAI Token (instead of using the mainnet DAI)
+- Then, if we are in a local environment, we need to deploy the Balancer factory. If we are in testnet or mainnet, jump this step
+- After that, we configure the pool settings (fees and balances for each token) and deploy the Balancer pool.
+- Due the REAL FUND TOKEN uses a whitelist, we need to add to the whitelist all the balancer addresses because the Token contract needs to interact with this addresses
+- After all, the pool is ready to be used
