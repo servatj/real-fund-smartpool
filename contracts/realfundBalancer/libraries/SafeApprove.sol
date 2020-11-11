@@ -3,7 +3,7 @@ pragma solidity 0.6.12;
 
 // Imports
 
-import "../interfaces/IERC20Balancer.sol";
+import "../../interfaces/IERC20.sol";
 
 // Libraries
 
@@ -21,7 +21,7 @@ library SafeApprove {
      * @param spender - entity the owner (sender) is approving to spend his tokens
      * @param amount - number of tokens being approved
      */
-    function safeApprove(IERC20Balancer token, address spender, uint amount) internal returns (bool) {
+    function safeApprove(IERC20 token, address spender, uint amount) internal returns (bool) {
         uint currentAllowance = token.allowance(address(this), spender);
 
         // Do nothing if allowance is already set to this value

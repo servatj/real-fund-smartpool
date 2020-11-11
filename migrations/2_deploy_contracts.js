@@ -4,7 +4,6 @@ const DaiToken = artifacts.require('./DaiToken');
 
 // Balancer Pools and Factories
 const BFactory = artifacts.require('BFactory');
-const BalancerSafeMath = artifacts.require('BalancerSafeMath');
 const BalancerSafeMathMock = artifacts.require('BalancerSafeMathMock');
 
 // Balancer Pools and Factories

@@ -2,7 +2,7 @@
 pragma solidity 0.6.12;
 
 import './ERC20.sol';
-import '../interfaces/IRealFundTokenERC20.sol';
+import '../../interfaces/IRealFundTokenERC20.sol';
 
 contract RealFundTokenERC20 is IRealFundTokenERC20, ERC20 {
     address private _owner;

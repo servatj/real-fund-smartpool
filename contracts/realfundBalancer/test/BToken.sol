@@ -2,7 +2,7 @@
 pragma solidity ^0.6.6;
 
 import "./BNum.sol";
-import "../interfaces/IERC20Balancer.sol";
+import "../../interfaces/IERC20.sol";
 
 // Highly opinionated token implementation
 
@@ -65,7 +65,7 @@ contract BTokenBase is BNum {
     }
 }
 
-contract BToken is BTokenBase, IERC20Balancer {
+contract BToken is BTokenBase, IERC20 {
 
     string  private _name     = "Balancer Pool Token";
     string  private _symbol   = "BPT";

@@ -4,7 +4,7 @@ pragma solidity 0.6.12;
 // Imports
 
 import "../libraries/BalancerSafeMath.sol";
-import "../interfaces/IERC20Balancer.sol";
+import "../../interfaces/IERC20.sol";
 
 // Contracts
 
@@ -14,7 +14,7 @@ import "../interfaces/IERC20Balancer.sol";
  * @author Balancer Labs
  * @title Highly opinionated token implementation
 */
-contract PCToken is IERC20Balancer {
+contract PCToken is IERC20 {
     using BalancerSafeMath for uint;
 
     // State variables

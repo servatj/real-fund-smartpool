@@ -6,9 +6,9 @@ pragma experimental ABIEncoderV2;
 
 // Imports
 
-import "./interfaces/IBFactory.sol";
-import "../realfundToken/interfaces/IRealFundTokenERC20.sol";
-import "./interfaces/IERC20Balancer.sol";
+import "../interfaces/IBFactory.sol";
+import "../interfaces/IRealFundTokenERC20.sol";
+import "../interfaces/IERC20.sol";
 
 // Contracts
 
@@ -52,7 +52,7 @@ contract RealFundFactory {
         require(tokens.length == denorms.length, "ERR_LENGTH_MISMATCH");
 
         for (uint i = 0; i < tokens.length; i++) {
-            IERC20Balancer token = IERC20Balancer(tokens[i]);
+            IERC20 token = IERC20(tokens[i]);
             require(token.transferFrom(msg.sender, address(this), balances[i]), "ERR_TRANSFER_FAILED");
             if (token.allowance(address(this), address(pool)) > 0) {
                 token.approve(address(pool), 0);

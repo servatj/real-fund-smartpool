@@ -6,7 +6,7 @@ pragma experimental ABIEncoderV2;
 
 // Imports
 
-import "../interfaces/IBFactory.sol";
+import "../../interfaces/IBFactory.sol";
 import "./PCToken.sol";
 import "../utils/BalancerReentrancyGuard.sol";
 import "../utils/BalancerOwnable.sol";
@@ -40,7 +40,7 @@ import "../libraries/SafeApprove.sol";
  */
 contract ConfigurableRightsPool is PCToken, BalancerOwnable, BalancerReentrancyGuard {
     using BalancerSafeMath for uint;
-    using SafeApprove for IERC20Balancer;
+    using SafeApprove for IERC20;
 
     // Type declarations
 
@@ -975,10 +975,10 @@ contract ConfigurableRightsPool is PCToken, BalancerOwnable, BalancerReentrancyG
             uint bal = _initialBalances[i];
             uint denorm = gradualUpdate.startWeights[i];
 
-            bool returnValue = IERC20Balancer(t).transferFrom(msg.sender, address(this), bal);
+            bool returnValue = IERC20(t).transferFrom(msg.sender, address(this), bal);
             require(returnValue, "ERR_ERC20_FALSE");
 
-            returnValue = IERC20Balancer(t).safeApprove(address(bPool), BalancerConstants.MAX_UINT);
+            returnValue = IERC20(t).safeApprove(address(bPool), BalancerConstants.MAX_UINT);
             require(returnValue, "ERR_ERC20_FALSE");
 
             bPool.bind(t, bal, denorm);
@@ -1008,7 +1008,7 @@ contract ConfigurableRightsPool is PCToken, BalancerOwnable, BalancerReentrancyG
         uint tokenBalance = bPool.getBalance(erc20);
         uint tokenWeight = bPool.getDenormalizedWeight(erc20);
 
-        bool xfer = IERC20Balancer(erc20).transferFrom(from, address(this), amount);
+        bool xfer = IERC20(erc20).transferFrom(from, address(this), amount);
         require(xfer, "ERR_ERC20_FALSE");
         bPool.rebind(erc20, BalancerSafeMath.badd(tokenBalance, amount), tokenWeight);
     }
@@ -1021,7 +1021,7 @@ contract ConfigurableRightsPool is PCToken, BalancerOwnable, BalancerReentrancyG
         uint tokenWeight = bPool.getDenormalizedWeight(erc20);
         bPool.rebind(erc20, BalancerSafeMath.bsub(tokenBalance, amount), tokenWeight);
 
-        bool xfer = IERC20Balancer(erc20).transfer(to, amount);
+        bool xfer = IERC20(erc20).transfer(to, amount);
         require(xfer, "ERR_ERC20_FALSE");
     }
 

@@ -6,8 +6,8 @@ pragma experimental ABIEncoderV2;
 
 // Imports
 
-import "./interfaces/IBFactory.sol";
-import "./interfaces/IERC20Balancer.sol";
+import "../interfaces/IBFactory.sol";
+import "../interfaces/IERC20.sol";
 
 contract RealFundSwap {
 
@@ -24,7 +24,7 @@ contract RealFundSwap {
     function swapRealfundForDai(uint daiAmount) external {
         uint price = _pool.getSpotPrice(_realfund, _dai);
         uint realfundAmount = price * daiAmount;
-        IERC20Balancer(_realfund).approve(address(_pool), realfundAmount);
+        IERC20(_realfund).approve(address(_pool), realfundAmount);
         _pool.swapExactAmountOut(_realfund,realfundAmount,_dai,daiAmount * 1e18,price);
     }
 
