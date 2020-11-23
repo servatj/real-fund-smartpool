@@ -67,8 +67,8 @@ contract RealFundFactory {
         emit TokensAdded();
     }
 
-    function finalizePool(IBPool pool) external {
-        pool.finalize();
-        require(pool.transfer(msg.sender, pool.balanceOf(address(this))), "ERR_TRANSFER_FAILED");
+    function finalizePool(address pool) external {
+        IBPool(pool).finalize();
+        require(IBPool(pool).transfer(msg.sender, IBPool(pool).balanceOf(address(this))), "ERR_TRANSFER_FAILED");
     }
 }

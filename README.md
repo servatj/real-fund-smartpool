@@ -13,6 +13,8 @@ npm install
 truffle migrate --reset
 6. or Deploy in testnet (Kovan)
 truffle migrate --reset --network kovan
+7. To deploy & run tests in local environment
+truffle test
 
 WHAT IS DEPLOYED?
 - First we deploy two ERC20 tokens, first the REAL FUND TOKEN with 75.000 units and second and only for testing the DAI Token (instead of using the mainnet DAI)

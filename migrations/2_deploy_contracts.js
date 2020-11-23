@@ -2,9 +2,8 @@
 const RealFundTokenERC20 = artifacts.require('./RealFundTokenERC20');
 const DaiToken = artifacts.require('./DaiToken');
 
-// Balancer Pools and Factories
+// Balancer Factory contract
 const BFactory = artifacts.require('BFactory');
-const BalancerSafeMathMock = artifacts.require('BalancerSafeMathMock');
 
 // Balancer Pools and Factories
 const RealFundFactory = artifacts.require('RealFundFactory');
@@ -24,7 +23,6 @@ async function doDeploy(deployer, network, accounts) {
     // 3. If we are in a develpment environment, deploy the Balancer Factory Contract, otherwhise, use the address in the ethereum network
     if (network === 'development' || network === 'coverage') {
         await deployer.deploy(BFactory);
-        await deployer.deploy(BalancerSafeMathMock);
         console.log('Balancer Factory deployed');
     }
 
