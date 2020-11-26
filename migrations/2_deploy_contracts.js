@@ -5,13 +5,15 @@ const DaiToken = artifacts.require('./DaiToken');
 // Balancer Factory contract
 const BFactory = artifacts.require('BFactory');
 
+const BPool = artifacts.require('BPool');
+
 // Balancer Pools and Factories
 const RealFundFactory = artifacts.require('RealFundFactory');
 const RealFundSwap = artifacts.require('RealFundSwap');
 
 async function doDeploy(deployer, network, accounts) {
     // 1. Deploy the RealFund ERC20 75.000 tokens
-    await deployer.deploy(RealFundTokenERC20, web3.utils.toWei('200000'));
+    await deployer.deploy(RealFundTokenERC20, web3.utils.toWei('75000'));
     const REALFUND = await RealFundTokenERC20.deployed();
     console.log('RealFund Token deployed:', REALFUND.address);
 
@@ -28,9 +30,9 @@ async function doDeploy(deployer, network, accounts) {
 
     // 4. Configure the pool settings
     const swapFee = web3.utils.toWei('0.03');
-    const startWeights = [web3.utils.toWei('2'), web3.utils.toWei('38')]; // 50%/50%    // FIXME. Set good parameters
-    const startBalances = [web3.utils.toWei('1000'), web3.utils.toWei('1000')];
-    const tokenAddresses = [DAI.address, REALFUND.address];
+    const startWeights = [web3.utils.toWei('5'), web3.utils.toWei('5')]; // 50%/50%    // FIXME. Set good parameters
+    const startBalances = [web3.utils.toWei('100'), web3.utils.toWei('1000')];
+    const tokenAddresses = [REALFUND.address, DAI.address];
 
     // 5. Deploy the RealFundFactory contract
     await deployer.deploy(RealFundFactory);
@@ -85,8 +87,26 @@ async function doDeploy(deployer, network, accounts) {
         startWeights
     );
 
+    await REALFUND.approve(poolAddress, web3.utils.toTwosComplement(-1));
+    await DAI.approve(poolAddress, web3.utils.toTwosComplement(-1));
+
     console.log('RealFund and DAI tokens added to the pool');
 
+    let pool = await BPool.at(poolAddress);
+    let price = await pool.getSpotPrice(DAI.address, REALFUND.address);
+    let priceWithSlippage = price * 105 / 100;
+    priceWithSlippage = web3.utils.fromWei(priceWithSlippage.toString(), 'ether');
+    console.log('Realfund / Dai price->', web3.utils.fromWei(price.toString(), 'ether'));
+    const swapResult = await pool.swapExactAmountIn(REALFUND.address, web3.utils.toWei('1'), DAI.address, web3.utils.toWei('0'), web3.utils.toWei(priceWithSlippage));
+    
+    const log = swapResult.logs[0].args;
+    console.log('RealFund tokens that enter into the pool:', web3.utils.fromWei(log.tokenAmountIn.toString(), 'ether'));
+    console.log('Dai tokens that are removed from the pool:', web3.utils.fromWei(log.tokenAmountOut.toString(), 'ether'));
+
+    price = await pool.getSpotPrice(DAI.address, REALFUND.address);
+    console.log('Realfund / Dai new price->', web3.utils.fromWei(price.toString(), 'ether'));
+
+/*
     // 10. Swapper deployment
     await deployer.deploy(RealFundSwap, poolAddress, REALFUND.address, DAI.address);
     const swap = await RealFundSwap.deployed();
@@ -121,6 +141,8 @@ async function doDeploy(deployer, network, accounts) {
         console.log('SWAP CONTRACT REALFUND BALANCE AFTER SWAP:', realfundBalance.toString());
         console.log('SWAP CONTRACT DAI BALANCE AFTER SWAP:', daiBalance.toString());
     }
+
+*/
 }
 
 module.exports = function(deployer, network, accounts) {
