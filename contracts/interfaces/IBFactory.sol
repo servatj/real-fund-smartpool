@@ -95,7 +95,7 @@ interface IBPool {
         uint maxPrice
     )
         external
-        returns (uint tokenAmountOut, uint spotPriceAfter)
+        returns (uint tokenAmountOut, uint spotPriceAfter);
 }
 
 interface IBFactory {
