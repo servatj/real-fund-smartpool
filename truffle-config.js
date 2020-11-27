@@ -21,6 +21,7 @@
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const fs = require('fs');
 const mnemonic = fs.readFileSync(".secret").toString().trim();
+const infura = fs.readFileSync(".infura").toString().trim();
 
 module.exports = {
   /**
@@ -58,7 +59,7 @@ module.exports = {
     // Useful for deploying to a public network.
     // NB: It's important to wrap the provider as a function.
     kovan: {
-     provider: () => new HDWalletProvider(mnemonic, `https://kovan.infura.io/v3/10c1f0579cc448bfa9e2a52a3bdaa451`),
+     provider: () => new HDWalletProvider(mnemonic, `https://kovan.infura.io/v3/${infura}`),
      network_id: 42,       // Ropsten's id
      skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
     },

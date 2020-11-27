@@ -67,10 +67,6 @@ async function doDeploy(deployer, network, accounts) {
     await REALFUND.addToWhitelist(realFundFactory.address);
 
     if (network == 'kovan-fork' || network == 'kovan') {
-        // FIXME. Direcciones de Josep y Jose Ramon
-        await REALFUND.addToWhitelist(web3.utils.toChecksumAddress('0x65ef5b37369f98701f4EC29258d90489623EC239'));
-        await REALFUND.addToWhitelist(web3.utils.toChecksumAddress('0xa9aCC2b929B92a86084CCB115b78A6D627309788'));
-
         // Add Kovan balancer addresses in the whitelist to allow the swap
         await REALFUND.addToWhitelist(web3.utils.toChecksumAddress('0x4e67bf5bD28Dd4b570FBAFe11D0633eCbA2754Ec')); // Exchange Proxy
         await REALFUND.addToWhitelist(web3.utils.toChecksumAddress('0xC5570FC7C828A8400605e9843106aBD675006093')); // Onchain Registry
@@ -91,7 +87,8 @@ async function doDeploy(deployer, network, accounts) {
     await DAI.approve(poolAddress, web3.utils.toTwosComplement(-1));
 
     console.log('RealFund and DAI tokens added to the pool');
-
+/*
+    // Example calling the pool directly from Javascript
     let pool = await BPool.at(poolAddress);
     let price = await pool.getSpotPrice(DAI.address, REALFUND.address);
     let priceWithSlippage = price * 105 / 100;
@@ -105,24 +102,30 @@ async function doDeploy(deployer, network, accounts) {
 
     price = await pool.getSpotPrice(DAI.address, REALFUND.address);
     console.log('Realfund / Dai new price->', web3.utils.fromWei(price.toString(), 'ether'));
+    
+    price = await pool.getSpotPrice(DAI.address, REALFUND.address);
+    priceWithSlippage = price * 105 / 100;
+    priceWithSlippage = web3.utils.fromWei(priceWithSlippage.toString(), 'ether');
+    console.log('Dai / Realfund price->', web3.utils.fromWei(price.toString(), 'ether'));
+    const res = await pool.swapExactAmountIn(DAI.address, web3.utils.toWei('1'), REALFUND.address, web3.utils.toWei('0'), web3.utils.toWei(priceWithSlippage));
+*/
 
-/*
-    // 10. Swapper deployment
+    /* Example: Create an SmartContract that hold the tokens and make the swap through the SmartContract
     await deployer.deploy(RealFundSwap, poolAddress, REALFUND.address, DAI.address);
     const swap = await RealFundSwap.deployed();
     console.log('Swapper contract deployed at address: ', swap.address);
 
-    // 11. Check there's a price in the pool
+    // Check there's a price in the pool
     const price = await swap.getSpotPrice();
     console.log('Swapper Price: ', price.toString());
 
-    // 12. Set permissions to the swap contract to do the swap
+    // Set permissions to the swap contract to do the swap
     await REALFUND.addToWhitelist(swap.address);
     await REALFUND.approve(RealFundSwap.address, web3.utils.toTwosComplement(-1));
     await DAI.approve(RealFundSwap.address, web3.utils.toTwosComplement(-1));
     console.log('Swap contract approve to spend the tokens');
     
-    // 13. Transfer the tokens to the swapper contract to do a swap
+    // Transfer the tokens to the swapper contract to do a swap
     // WARNING. DON'T EXECUTE THIS STEP IN PRODUCTION, THE SWAPPER CONTRACT DOESN'T HAVE A FUNCTION TO WITHDRAW THE TOKENS. JUST FOR TEST IN LOCAL
     if (network === 'development' || network === 'coverage') {
         await REALFUND.approve(accounts[0], web3.utils.toTwosComplement(-1));
@@ -141,7 +144,6 @@ async function doDeploy(deployer, network, accounts) {
         console.log('SWAP CONTRACT REALFUND BALANCE AFTER SWAP:', realfundBalance.toString());
         console.log('SWAP CONTRACT DAI BALANCE AFTER SWAP:', daiBalance.toString());
     }
-
 */
 }
 
